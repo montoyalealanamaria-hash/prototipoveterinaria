@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veterinaria [Nombre] - Página Web y Gestión</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            vetPrimary: '#059669',
+            vetPrimaryDark: '#047857',
+            vetSecondary: '#0284c7',
+            vetBg: '#ffffff',
+            vetSurface: '#f8fafc'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-vetBg text-slate-800 antialiased pb-20 md:pb-8">
+
+  <!-- ==================== CABECERA PRINCIPAL (PÚBLICA + ACCESO EQUIPO) ==================== -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <!-- Marca / Nombre editable -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="bg-emerald-100 text-vetPrimary p-2 rounded-xl shrink-0">
+          <i data-lucide="paw-print" class="w-5 h-5"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <h1 id="nombre-veterinaria" class="font-bold text-slate-900 text-sm sm:text-base truncate outline-none focus:ring-2 focus:ring-emerald-400 rounded px-1" contenteditable="true" title="Haz clic para cambiar el nombre de la veterinaria">Veterinaria [Nombre]</h1>
+            <span id="badge-modo" class="hidden sm:inline-flex text-[11px] font-semibold bg-emerald-50 text-vetPrimary border border-emerald-200 px-2 py-0.5 rounded-full">
+              Sitio Cliente
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500 truncate px-1">Cuidado clínico, tienda y reservas en línea</p>
+        </div>
+      </div>
+
+      <!-- Navegación en PC (Modo Cliente) -->
+      <nav id="public-nav" class="hidden md:flex items-center gap-1">
+        <button data-pub="home" class="pub-nav-btn active px-3.5 py-2 rounded-xl text-sm font-medium transition">Inicio</button>
+        <button data-pub="catalogo" class="pub-nav-btn px-3.5 py-2 rounded-xl text-sm font-medium transition">Servicios y Productos</button>
+        <button data-pub="reservar" class="pub-nav-btn px-3.5 py-2 rounded-xl text-sm font-medium transition">Reservar Cita</button>
+      </nav>
+
+      <!-- Navegación en PC (Modo Equipo) -->
+      <nav id="staff-nav" class="hidden items-center gap-1 overflow-x-auto">
+        <button data-staff="ventas" class="staff-nav-btn active px-3 py-1.5 rounded-xl text-xs font-semibold transition whitespace-nowrap">Ventas e Inventario</button>
+        <button data-staff="agenda" class="staff-nav-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition whitespace-nowrap">Agenda</button>
+        <button data-staff="pacientes" class="staff-nav-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition whitespace-nowrap">Pacientes e Historias</button>
+        <button data-staff="crm" class="staff-nav-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition whitespace-nowrap">CRM / WhatsApp</button>
+        <button data-staff="reportes" class="staff-nav-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition whitespace-nowrap">Reportes</button>
+      </nav>
+
+      <!-- Botones de cambio de modo -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button id="btn-abrir-equipo" onclick="abrirModalEquipo()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+          <span>Acceso Equipo</span>
+        </button>
+        <button id="btn-volver-publico" onclick="salirModoEquipo()" class="hidden bg-emerald-50 hover:bg-emerald-100 text-vetPrimary border border-emerald-200 text-xs font-semibold px-3.5 py-2 rounded-xl transition items-center gap-1.5">
+          <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+          <span>Ver Página Cliente</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== CONTENEDOR SITIO PÚBLICO (CLIENTES) ==================== -->
+  <main id="public-portal" class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 space-y-12">
+
+    <!-- 1. INICIO (HOME) -->
+    <section id="pub-home" class="pub-section space-y-10">
+      <div class="bg-gradient-to-br from-emerald-50 via-white to-sky-50 border border-slate-200/80 rounded-3xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div class="space-y-4">
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold bg-emerald-100 text-vetPrimary px-3 py-1 rounded-full">
+            <i data-lucide="heart-pulse" class="w-3.5 h-3.5"></i> Atención Veterinaria Integral
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
+            Salud, bienestar y todo lo que tu mascota necesita en un solo lugar.
+          </h2>
+          <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+            Conoce nuestros servicios médicos, productos para tu mascota y agenda tu cita en segundos con confirmación y recordatorios de vacunas por WhatsApp.
+          </p>
+          <div class="flex flex-wrap gap-3 pt-2">
+            <button onclick="switchPublicSection('reservar')" class="bg-vetPrimary hover:bg-vetPrimaryDark text-white font-semibold text-sm px-5 py-3 rounded-xl shadow-sm transition flex items-center gap-2">
+              <i data-lucide="calendar-plus" class="w-4 h-4"></i> Reservar Cita Ahora
+            </button>
+            <button onclick="switchPublicSection('catalogo')" class="bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-semibold text-sm px-5 py-3 rounded-xl transition flex items-center gap-2">
+              <i data-lucide="shopping-bag" class="w-4 h-4 text-vetSecondary"></i> Ver Servicios y Productos
+            </button>
+          </div>
+        </div>
+
+        <!-- Tarjeta resumen de experiencia para el cliente -->
+        <div class="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Experiencia del Cliente</span>
+            <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">Web + Celular</span>
+          </div>
+          <div class="space-y-3 text-sm">
+            <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50">
+              <div class="p-2 bg-emerald-100 text-vetPrimary rounded-lg shrink-0"><i data-lucide="calendar-check" class="w-4 h-4"></i></div>
+              <div>
+                <p class="font-bold text-slate-900 text-xs sm:text-sm">Reserva de citas rápida</p>
+                <p class="text-xs text-slate-500">Elige servicio, fecha y hora sin llamadas largas.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50">
+              <div class="p-2 bg-sky-100 text-vetSecondary rounded-lg shrink-0"><i data-lucide="message-square-text" class="w-4 h-4"></i></div>
+              <div>
+                <p class="font-bold text-slate-900 text-xs sm:text-sm">Vínculo con WhatsApp y recordatorios</p>
+                <p class="text-xs text-slate-500">Confirmación al agendar y aviso automático cuando toque renovar vacunas.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50">
+              <div class="p-2 bg-teal-100 text-teal-700 rounded-lg shrink-0"><i data-lucide="package" class="w-4 h-4"></i></div>
+              <div>
+                <p class="font-bold text-slate-900 text-xs sm:text-sm">Productos y servicios visibles</p>
+                <p class="text-xs text-slate-500">Consulta disponibilidad y precios antes de visitarnos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista previa de servicios destacados -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-slate-900">Servicios Destacados</h3>
+          <button onclick="switchPublicSection('catalogo')" class="text-xs font-semibold text-vetSecondary hover:underline">Ver todo el catálogo →</button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-vetPrimary flex items-center justify-center mb-3"><i data-lucide="stethoscope" class="w-5 h-5"></i></div>
+            <h4 class="font-bold text-sm text-slate-900">Consulta General</h4>
+            <p class="text-xs text-slate-500 mt-1">Revisión clínica, diagnóstico y plan de cuidado.</p>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+            <div class="w-9 h-9 rounded-xl bg-sky-50 text-vetSecondary flex items-center justify-center mb-3"><i data-lucide="syringe" class="w-5 h-5"></i></div>
+            <h4 class="font-bold text-sm text-slate-900">Vacunación y Refuerzos</h4>
+            <p class="text-xs text-slate-500 mt-1">Esquemas al día con aviso automático por WhatsApp.</p>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+            <div class="w-9 h-9 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center mb-3"><i data-lucide="scissors" class="w-5 h-5"></i></div>
+            <h4 class="font-bold text-sm text-slate-900">Baño y Peluquería</h4>
+            <p class="text-xs text-slate-500 mt-1">Higiene, corte y cuidado del pelaje con cita previa.</p>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+            <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3"><i data-lucide="pill" class="w-5 h-5"></i></div>
+            <h4 class="font-bold text-sm text-slate-900">Farmacia y Alimentos</h4>
+            <p class="text-xs text-slate-500 mt-1">Antipulgas, desparasitantes y alimento balanceado.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. SERVICIOS Y PRODUCTOS (VISTA CLIENTE) -->
+    <section id="pub-catalogo" class="pub-section hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Servicios y Productos</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Explora lo que ofrecemos para tu mascota y agenda o consulta por WhatsApp.</p>
+        </div>
+        <input type="text" id="cliente-buscar" placeholder="Buscar servicio o producto..." class="w-full sm:w-64 px-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-vetPrimary" />
+      </div>
+
+      <div id="cliente-catalogo-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Renderizado por JS -->
+      </div>
+    </section>
+
+    <!-- 3. RESERVAR CITA + CONEXIÓN WHATSAPP (VISTA CLIENTE) -->
+    <section id="pub-reservar" class="pub-section hidden space-y-6">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-900">Reservar Cita en Línea</h2>
+        <p class="text-xs sm:text-sm text-slate-500">Completa los datos y vincula la reserva con WhatsApp para recibir confirmación y recordatorios.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <form id="form-reserva-cliente" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Tu Nombre (Propietario)</label>
+              <input type="text" id="res-dueno" required placeholder="Ej: Laura Gómez" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-vetPrimary" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Tu WhatsApp</label>
+              <input type="text" id="res-wpp" required placeholder="Ej: 3105551234" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-vetPrimary" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Nombre de tu Mascota</label>
+              <input type="text" id="res-mascota" required placeholder="Ej: Max" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-vetPrimary" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Servicio</label>
+              <select id="res-servicio" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:border-vetPrimary">
+                <option value="Consulta General">Consulta General</option>
+                <option value="Vacunación / Refuerzo">Vacunación / Refuerzo</option>
+                <option value="Baño y Peluquería">Baño y Peluquería</option>
+                <option value="Desparasitación">Desparasitación</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Fecha Preferida</label>
+              <input type="date" id="res-fecha" required class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-vetPrimary" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Hora</label>
+              <input type="time" id="res-hora" required value="10:00" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-vetPrimary" />
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-3 bg-vetPrimary hover:bg-vetPrimaryDark text-white font-semibold text-sm rounded-xl transition shadow-sm flex items-center justify-center gap-2">
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i> Confirmar Reserva y Vincular WhatsApp
+          </button>
+        </form>
+
+        <!-- Confirmación y enlace directo a WhatsApp -->
+        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-vetSecondary">Confirmación / WhatsApp</span>
+            <h3 class="text-base font-bold text-slate-900 mt-1">Mensaje de Reserva y Seguimiento</h3>
+            <p class="text-xs text-slate-500 mt-1">Al agendar, la cita queda registrada para el equipo y se genera el mensaje para enviar o confirmar por WhatsApp.</p>
+
+            <div id="reserva-confirmacion-box" class="mt-4 bg-white border border-slate-200 rounded-2xl p-4 text-xs text-slate-700 space-y-2 shadow-sm">
+              <p class="text-slate-400 italic">Completa el formulario de la izquierda para generar la confirmación de cita y el enlace de WhatsApp.</p>
+            </div>
+          </div>
+
+          <a id="btn-wpp-directo" href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-[#25D366] hover:bg-emerald-600 text-white font-semibold text-xs sm:text-sm rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
+            <i data-lucide="message-circle" class="w-4 h-4"></i> Abrir en WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== CONTENEDOR ACCESO EQUIPO (INTERNO VETERINARIA) ==================== -->
+  <main id="staff-portal" class="hidden max-w-7xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
+
+    <!-- 1. VENTAS E INVENTARIO -->
+    <section id="staff-ventas" class="staff-section space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900">Ventas e Inventario (Uso Interno)</h2>
+          <p class="text-xs text-slate-500">Registra ventas, controla existencias y observa el descuento automático de inventario.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs">
+            Ventas hoy: <strong id="staff-kpi-ventas" class="text-vetPrimary">$245.000</strong>
+          </div>
+          <input type="text" id="staff-buscar-prod" placeholder="Buscar en inventario..." class="px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-vetPrimary" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div id="staff-lista-productos" class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm h-fit">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <i data-lucide="shopping-cart" class="w-4 h-4 text-vetPrimary"></i> Caja / Venta
+            </h3>
+            <button onclick="vaciarCarrito()" class="text-xs text-slate-400 hover:text-rose-600">Limpiar</button>
+          </div>
+          <div id="staff-carrito-items" class="py-4 space-y-2 max-h-60 overflow-y-auto text-xs">
+            <p class="text-slate-400 text-center py-6">Sin ítems seleccionados.</p>
+          </div>
+          <div class="border-t border-slate-100 pt-3 space-y-3">
+            <div class="flex justify-between font-bold text-sm">
+              <span>Total</span>
+              <span id="staff-carrito-total" class="text-vetPrimary">$0</span>
+            </div>
+            <button onclick="confirmarVenta()" class="w-full py-2.5 bg-vetPrimary hover:bg-vetPrimaryDark text-white font-semibold text-xs sm:text-sm rounded-xl transition">
+              Registrar Venta y Descontar Stock
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. AGENDA INTERNA -->
+    <section id="staff-agenda" class="staff-section hidden space-y-4">
+      <div>
+        <h2 class="text-xl font-bold text-slate-900">Agenda de Citas (Equipo)</h2>
+        <p class="text-xs text-slate-500">Incluye las citas reservadas por clientes desde la página web.</p>
+      </div>
+      <div id="staff-lista-citas" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3"></div>
+    </section>
+
+    <!-- 3. PACIENTES E HISTORIAS CLÍNICAS -->
+    <section id="staff-pacientes" class="staff-section hidden space-y-4">
+      <div>
+        <h2 class="text-xl font-bold text-slate-900">Pacientes e Historias Clínicas</h2>
+        <p class="text-xs text-slate-500">Consulta datos de la mascota, propietario y próximas fechas de vacunación.</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div id="staff-lista-pacientes" class="space-y-3"></div>
+        <div id="staff-detalle-historia" class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm"></div>
+      </div>
+    </section>
+
+    <!-- 4. CRM / RECORDATORIOS WHATSAPP -->
+    <section id="staff-crm" class="staff-section hidden space-y-4">
+      <div>
+        <h2 class="text-xl font-bold text-slate-900">CRM y Recordatorios Automáticos por WhatsApp</h2>
+        <p class="text-xs text-slate-500">Seguimiento de vacunas y renovaciones según citas o registros del paciente.</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+          <h3 class="font-bold text-slate-900 text-sm">Vacunas / Renovaciones Próximas</h3>
+          <div id="staff-lista-vencimientos" class="space-y-3"></div>
+        </div>
+
+        <div class="bg-slate-900 p-4 rounded-3xl max-w-md mx-auto w-full border-4 border-slate-800">
+          <div class="bg-[#075E54] text-white px-4 py-3 rounded-t-2xl flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-emerald-200 text-emerald-900 font-bold flex items-center justify-center">
+              <i data-lucide="paw-print" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold">Recordatorio CRM · WhatsApp</p>
+              <p class="text-[10px] text-emerald-200">Aviso automático de vacuna/renovación</p>
+            </div>
+          </div>
+          <div class="bg-[#ECE5DD] p-4 min-h-[220px] flex flex-col justify-between rounded-b-2xl">
+            <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-xs text-slate-800">
+              <p id="wpp-preview-texto" class="whitespace-pre-line leading-relaxed"></p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-300/60 flex items-center justify-between gap-2">
+              <span id="wpp-estado-envio" class="text-xs text-slate-600 font-medium">Listo para envío</span>
+              <button onclick="simularEnvioWpp()" class="bg-[#25D366] hover:bg-emerald-600 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1">
+                <i data-lucide="send" class="w-3.5 h-3.5"></i> Simular Envío
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. REPORTES -->
+    <section id="staff-reportes" class="staff-section hidden space-y-4">
+      <div>
+        <h2 class="text-xl font-bold text-slate-900">Reportes de Gestión</h2>
+        <p class="text-xs text-slate-500">Indicadores clave de ingresos, agenda y retención por recordatorios.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Ingresos Mensuales Estimados</p>
+          <p class="text-2xl font-bold text-slate-900 mt-1">$6.840.000</p>
+          <p class="text-xs text-emerald-600 mt-1">Ventas + servicios clínicos</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Retorno por Recordatorio WhatsApp</p>
+          <p class="text-2xl font-bold text-slate-900 mt-1">82%</p>
+          <p class="text-xs text-sky-600 mt-1">Vacunas y renovaciones agendadas</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Citas Registradas</p>
+          <p id="staff-kpi-citas" class="text-2xl font-bold text-slate-900 mt-1">4</p>
+          <p class="text-xs text-slate-500 mt-1">Incluye reservas web</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== BARRA INFERIOR MÓVIL ==================== -->
+  <nav id="mobile-public-nav" class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 flex justify-around py-2 z-30">
+    <button data-pub="home" class="pub-nav-btn active flex flex-col items-center text-[11px] font-medium px-3 py-1 rounded-lg">
+      <i data-lucide="home" class="w-4 h-4 mb-0.5"></i> Inicio
+    </button>
+    <button data-pub="catalogo" class="pub-nav-btn flex flex-col items-center text-[11px] font-medium px-3 py-1 rounded-lg">
+      <i data-lucide="shopping-bag" class="w-4 h-4 mb-0.5"></i> Catálogo
+    </button>
+    <button data-pub="reservar" class="pub-nav-btn flex flex-col items-center text-[11px] font-medium px-3 py-1 rounded-lg">
+      <i data-lucide="calendar-plus" class="w-4 h-4 mb-0.5"></i> Reservar
+    </button>
+  </nav>
+
+  <nav id="mobile-staff-nav" class="hidden fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 justify-around py-2 z-30">
+    <button data-staff="ventas" class="staff-nav-btn active flex flex-col items-center text-[10px] font-semibold px-1.5 py-1 rounded-lg">
+      <i data-lucide="shopping-cart" class="w-4 h-4 mb-0.5"></i> Ventas
+    </button>
+    <button data-staff="agenda" class="staff-nav-btn flex flex-col items-center text-[10px] font-semibold px-1.5 py-1 rounded-lg">
+      <i data-lucide="calendar" class="w-4 h-4 mb-0.5"></i> Agenda
+    </button>
+    <button data-staff="pacientes" class="staff-nav-btn flex flex-col items-center text-[10px] font-semibold px-1.5 py-1 rounded-lg">
+      <i data-lucide="stethoscope" class="w-4 h-4 mb-0.5"></i> Pacientes
+    </button>
+    <button data-staff="crm" class="staff-nav-btn flex flex-col items-center text-[10px] font-semibold px-1.5 py-1 rounded-lg">
+      <i data-lucide="message-circle" class="w-4 h-4 mb-0.5"></i> CRM
+    </button>
+    <button data-staff="reportes" class="staff-nav-btn flex flex-col items-center text-[10px] font-semibold px-1.5 py-1 rounded-lg">
+      <i data-lucide="bar-chart-3" class="w-4 h-4 mb-0.5"></i> Reportes
+    </button>
+  </nav>
+
+  <!-- ==================== MODAL DE ACCESO EQUIPO (DEMO) ==================== -->
+  <div id="modal-equipo" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 border border-slate-200 shadow-xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-slate-900 text-base">Acceso del Equipo Veterinario</h3>
+        <button onclick="cerrarModalEquipo()" class="text-slate-400 hover:text-slate-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500">Vista interna para gestionar ventas, inventario, citas, historias clínicas y recordatorios por WhatsApp.</p>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Usuario / Rol</label>
+          <input type="text" id="login-usuario" value="recepcion@veterinaria.com" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-vetPrimary" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Clave de Acceso (Demo)</label>
+          <input type="password" id="login-clave" value="1234" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-vetPrimary" />
+        </div>
+      </div>
+      <button onclick="entrarModoEquipo()" class="w-full py-2.5 bg-vetPrimary hover:bg-vetPrimaryDark text-white font-semibold text-sm rounded-xl transition">
+        Entrar al Panel Interno
+      </button>
+    </div>
+  </div>
+
+  <!-- Notificación flotante -->
+  <div id="toast" class="fixed bottom-20 md:bottom-6 right-4 bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50">
+    Acción realizada
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
